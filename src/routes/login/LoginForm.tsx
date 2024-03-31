@@ -12,13 +12,26 @@ import React from "react";
 
 import axios from "axios";
 
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
 export function LoginForm() {
+  const navigate = useNavigate();
+
+  const [cookie, setCookie, removeCookie] = useCookies(["auth"]);
+
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let data = Object.fromEntries(new FormData(e.currentTarget));
 
-    console.log(data);
+    axios
+      .post("http://127.0.0.1:8000/api/users/login/", data)
+      .then((response) => {
+        setCookie("auth", response.data.token, { path: "/" });
+
+        return navigate("/dashboard/", { replace: true });
+      });
   };
 
   return (
@@ -34,7 +47,7 @@ export function LoginForm() {
         <Label className="font-lexend text-[12px] font-normal not-italic leading-[15px] text-10">
           Username
         </Label>
-        <Input className="bg-60 h-[37.75px] w-[288.61px] rounded-[50px] p-3" />
+        <Input className="h-[37.75px] w-[288.61px] rounded-[50px] bg-60 p-3" />
         <FieldError className="absolute top-[55.75px] p-1 font-lexend text-xs text-red-600" />
       </TextField>
       <TextField
@@ -46,7 +59,7 @@ export function LoginForm() {
         <Label className="font-lexend text-[12px] font-normal not-italic leading-[15px] text-10">
           Password
         </Label>
-        <Input className="bg-60 h-[37.75px] w-[288.61px] rounded-[50px] p-3" />
+        <Input className="h-[37.75px] w-[288.61px] rounded-[50px] bg-60 p-3" />
         <FieldError className="absolute top-[55.75px] p-1 font-lexend text-xs text-red-600" />
         <div className="flex h-full w-full justify-end">
           <Link
@@ -71,6 +84,8 @@ export function LoginForm() {
           SIGN UP NOW!
         </a>
       </p>
+
+      <div>{cookie.auth}</div>
     </Form>
   );
 }
