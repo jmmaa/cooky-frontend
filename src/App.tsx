@@ -1,17 +1,18 @@
 import React, { useContext, createContext } from "react";
 
-import { LoginPage } from "./routes/login";
+import { LoginPage, SignupPage } from "./routes/auth";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
+import { Dashboard } from "./routes/dashboard";
 
 const ThemeContext = createContext("light");
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: <div>index</div>,
   },
 
   {
@@ -20,11 +21,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <div>SIGNUP PAGE</div>,
+    element: <SignupPage />,
   },
   {
     path: "/dashboard",
-    element: <div>DASHBOARD PAGE</div>,
+    element: <Dashboard />,
   },
   {
     path: "/not-implemented-yet",
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <ThemeContext.Provider value="pussy">
+    <ThemeContext.Provider value="">
       <RouterProvider router={router}></RouterProvider>
     </ThemeContext.Provider>
   );
